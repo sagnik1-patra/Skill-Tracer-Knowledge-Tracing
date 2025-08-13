@@ -1,0 +1,10 @@
+{
+  "meta": {
+    "problem_col_found": true,
+    "problem_col_name": "problem_id",
+    "smoothing_k": 1.0,
+    "note": "1PL-style: P(correct) ~ sigmoid(theta_student - b_item); b estimated from global p_item."
+  },
+  "num_skills": 265,
+  "num_items": 53091
+}
