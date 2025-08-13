@@ -1,0 +1,252 @@
+name: functional
+trainable: true
+layers:
+- module: keras.layers
+  class_name: InputLayer
+  config:
+    batch_shape:
+    - null
+    - 200
+    dtype: int32
+    sparse: false
+    ragged: false
+    name: input_layer
+  registered_name: null
+  name: input_layer
+  inbound_nodes: []
+- module: keras.layers
+  class_name: Embedding
+  config:
+    name: embedding
+    trainable: true
+    dtype:
+      module: keras
+      class_name: DTypePolicy
+      config:
+        name: float32
+      registered_name: null
+    input_dim: 531
+    output_dim: 64
+    embeddings_initializer:
+      module: keras.initializers
+      class_name: RandomUniform
+      config:
+        seed: null
+        minval: -0.05
+        maxval: 0.05
+      registered_name: null
+    embeddings_regularizer: null
+    activity_regularizer: null
+    embeddings_constraint: null
+    mask_zero: true
+  registered_name: null
+  build_config:
+    input_shape:
+    - null
+    - 200
+  name: embedding
+  inbound_nodes:
+  - args:
+    - class_name: __keras_tensor__
+      config:
+        shape:
+        - null
+        - 200
+        dtype: int32
+        keras_history:
+        - input_layer
+        - 0
+        - 0
+    kwargs: {}
+- module: keras.src.ops.numpy
+  class_name: NotEqual
+  config:
+    name: not_equal
+  registered_name: NotEqual
+  name: not_equal
+  inbound_nodes:
+  - args:
+    - class_name: __keras_tensor__
+      config:
+        shape:
+        - null
+        - 200
+        dtype: int32
+        keras_history:
+        - input_layer
+        - 0
+        - 0
+    - 0
+    kwargs: {}
+- module: keras.layers
+  class_name: LSTM
+  config:
+    name: lstm
+    trainable: true
+    dtype:
+      module: keras
+      class_name: DTypePolicy
+      config:
+        name: float32
+      registered_name: null
+    return_sequences: true
+    return_state: false
+    go_backwards: false
+    stateful: false
+    unroll: false
+    zero_output_for_mask: false
+    units: 128
+    activation: tanh
+    recurrent_activation: sigmoid
+    use_bias: true
+    kernel_initializer:
+      module: keras.initializers
+      class_name: GlorotUniform
+      config:
+        seed: null
+      registered_name: null
+    recurrent_initializer:
+      module: keras.initializers
+      class_name: Orthogonal
+      config:
+        seed: null
+        gain: 1.0
+      registered_name: null
+    bias_initializer:
+      module: keras.initializers
+      class_name: Zeros
+      config: {}
+      registered_name: null
+    unit_forget_bias: true
+    kernel_regularizer: null
+    recurrent_regularizer: null
+    bias_regularizer: null
+    activity_regularizer: null
+    kernel_constraint: null
+    recurrent_constraint: null
+    bias_constraint: null
+    dropout: 0.0
+    recurrent_dropout: 0.0
+    seed: null
+  registered_name: null
+  build_config:
+    input_shape:
+    - null
+    - 200
+    - 64
+  name: lstm
+  inbound_nodes:
+  - args:
+    - class_name: __keras_tensor__
+      config:
+        shape:
+        - null
+        - 200
+        - 64
+        dtype: float32
+        keras_history:
+        - embedding
+        - 0
+        - 0
+    kwargs:
+      training: false
+      mask:
+        class_name: __keras_tensor__
+        config:
+          shape:
+          - null
+          - 200
+          dtype: bool
+          keras_history:
+          - not_equal
+          - 0
+          - 0
+- module: keras.layers
+  class_name: Dropout
+  config:
+    name: dropout
+    trainable: true
+    dtype:
+      module: keras
+      class_name: DTypePolicy
+      config:
+        name: float32
+      registered_name: null
+    rate: 0.2
+    seed: null
+    noise_shape: null
+  registered_name: null
+  name: dropout
+  inbound_nodes:
+  - args:
+    - class_name: __keras_tensor__
+      config:
+        shape:
+        - null
+        - 200
+        - 128
+        dtype: float32
+        keras_history:
+        - lstm
+        - 0
+        - 0
+    kwargs:
+      training: false
+- module: keras.layers
+  class_name: Dense
+  config:
+    name: dense
+    trainable: true
+    dtype:
+      module: keras
+      class_name: DTypePolicy
+      config:
+        name: float32
+      registered_name: null
+    units: 1
+    activation: sigmoid
+    use_bias: true
+    kernel_initializer:
+      module: keras.initializers
+      class_name: GlorotUniform
+      config:
+        seed: null
+      registered_name: null
+    bias_initializer:
+      module: keras.initializers
+      class_name: Zeros
+      config: {}
+      registered_name: null
+    kernel_regularizer: null
+    bias_regularizer: null
+    kernel_constraint: null
+    bias_constraint: null
+  registered_name: null
+  build_config:
+    input_shape:
+    - null
+    - 200
+    - 128
+  name: dense
+  inbound_nodes:
+  - args:
+    - class_name: __keras_tensor__
+      config:
+        shape:
+        - null
+        - 200
+        - 128
+        dtype: float32
+        keras_history:
+        - dropout
+        - 0
+        - 0
+    kwargs: {}
+input_layers:
+- - input_layer
+  - 0
+  - 0
+output_layers:
+- - dense
+  - 0
+  - 0
